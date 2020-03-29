@@ -1,26 +1,16 @@
-package project2.ver01;
+package project2.ver02;
 
 import java.util.Random;
 import java.util.Scanner;
 
+public class AccountManager implements MenuChoice{
 
-public class Account implements MenuChoice{ //계좌 정보를 표현
-	
 	Scanner scan = new Scanner(System.in);
 	
-	
 	Account[] arrAcc = new Account[50];
-	int myaccNum, mymoney, index=0;
-	String owner;
+	Account acc = new Account();
+	int index=0;
 	
-	
-	
-	public Account() {	}
-	public Account (int accNum, String who, int money) {
-		myaccNum = accNum;
-		mymoney = money;
-		owner = who;
-	}
 	
 	
 	public void showMenu() {
@@ -31,22 +21,19 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 				"4.계좌정보출력\r");
 	
 		
-		Account acc = new Account();
-		Scanner scan = new Scanner(System.in);
 		while(true) {
-			acc.showMenu();
 			switch (scan.nextInt()) {
 			case MAKE:
-				acc.makeAccount();
+				makeAccount();
 				break;
 			case DEPOSIT:
-				acc.depositMoney();
+				depositMoney();
 				break;
 			case WITHDRAW:
-				acc.withdrawMoney();
+				withdrawMoney();
 				break;
 			case INQUIRE:
-				acc.showAccInfo();
+				showAccInfo();
 				break;
 			case EXIT:
 				System.exit(0);
@@ -56,16 +43,29 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 	}
 	public void makeAccount() {
 		System.out.println("***신규계좌개설***");
+		System.out.println("1.보통계좌  2.신용신뢰계좌");
 		
-		myaccNum = new Random().nextInt(99998)+1;
-		System.out.println("고객이름: ");
-		owner = scan.next();
-		mymoney = 1000;
-		System.out.println("고객이름: "+owner);
-		System.out.println("계좌번호: "+myaccNum);
-		System.out.println("잔      고: "+mymoney);
-		
-		arrAcc[index++] = new Account(myaccNum, owner, mymoney);
+		acc.myAccNum = new Random().nextInt(99998)+1;
+		switch(scan.nextInt()) {
+		case 1:
+			System.out.println("고객이름: ");
+			acc.owner = scan.next();
+			System.out.println("기본이자%(정수만입력): ");
+			
+			arrAcc[index++] = 
+					new NormalAccount(acc.myAccNum, acc.owner);
+			break;
+			
+		case 2:
+			System.out.println("고객이름: ");
+			acc.owner = scan.next();
+			arrAcc[index++] = 
+					new HighCreditAccount(acc.myAccNum, acc.owner);
+			break;
+		}
+		System.out.println("고객이름: "+acc.owner);
+		System.out.println("계좌번호: "+acc.myAccNum);
+		System.out.println("잔      고: "+acc.myMoney);
 		System.out.println("계좌개설이 완료되었습니다.");
 	}
 	public void depositMoney() {
@@ -85,7 +85,7 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 			
 			System.out.printf("----------\n"
 					+ "계좌번호: %s\n고객이름: %s\n잔고: %d\n"
-					,a.myaccNum,a.owner,a.mymoney);
+					,a.myAccNum,a.owner,a.myMoney);
 		}
 		System.out.println("전체계좌정보 출력이 완료되었습니다.");
 	}
@@ -98,7 +98,7 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 		
 		//계좌존재유무를 조회
 		for( ; index <= arrAcc.length ; index++) 
-			if(arrAcc[index].myaccNum == accNum) 
+			if(arrAcc[index].myAccNum == accNum) 
 				{existAcc = true;	break; }
 			else
 				existAcc = false;
@@ -111,7 +111,7 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 				System.out.println("입금액: ");
 				money = scan.nextInt();
 				if(money>0) {
-					arrAcc[index].mymoney += money;
+					arrAcc[index].myMoney += money;
 					System.out.println("입금되었습니다.");
 				}
 				else
@@ -121,8 +121,8 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 				System.out.println("출금액: ");
 				money = scan.nextInt();
 				//계좌가 있고 출금액이 잔고보다 <= 이면 출금진행
-				if(money<=arrAcc[index].mymoney) {
-					arrAcc[index].mymoney -= money;
+				if(money<=arrAcc[index].myMoney) {
+					arrAcc[index].myMoney -= money;
 					System.out.println("출금되었습니다.");
 				}
 				else
@@ -131,31 +131,22 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 		}//if
 		else
 			System.out.println("해당계좌가 없습니다.");
-			
-		
 	}
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public class Scan<ScType>{
-		ScType scVal;
-		public ScType scanMethod(String s){
-			Scanner scan = new Scanner(System.in);
-			ScType scVal = (ScType) scan.next();
-			return  scVal;
-		}
-	}
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
