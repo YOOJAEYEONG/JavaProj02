@@ -9,19 +9,22 @@ public class AccountManager implements MenuChoice{
 	
 	Account[] arrAcc = new Account[50];
 	Account acc = new Account();
+	HighCreditAccount highAccnt = new HighCreditAccount();
+	
 	int index=0;
 	
 	
 	
 	public void showMenu() {
-		System.out.println("-----Menu-----\r"
-				+ "1.계 좌 개 설\r" + 
-				"2.입	금\r" + 
-				"3.출	금\r" + 
-				"4.계좌정보출력\r");
 	
 		
 		while(true) {
+			System.out.println("-----Menu-----\r" +
+					"1.계 좌 개 설\r" + 
+					"2.입	금\r" + 
+					"3.출	금\r" + 
+					"4.계좌정보출력\r" +
+					"5.프로그램종료\r");
 			switch (scan.nextInt()) {
 			case MAKE:
 				makeAccount();
@@ -52,20 +55,24 @@ public class AccountManager implements MenuChoice{
 			acc.owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");
 			
-			arrAcc[index++] = 
-					new NormalAccount(acc.myAccNum, acc.owner);
+			arrAcc[index] = 
+					new NormalAccount(
+							acc.myAccNum, acc.owner, scan.nextInt());
+			arrAcc[index].info();
+			index++;
 			break;
 			
 		case 2:
 			System.out.println("고객이름: ");
 			acc.owner = scan.next();
-			arrAcc[index++] = 
-					new HighCreditAccount(acc.myAccNum, acc.owner);
+			System.out.println("기본이자%(정수만입력): ");
+			arrAcc[index] = 
+					new HighCreditAccount(
+							acc.myAccNum, acc.owner, scan.nextInt());
+			arrAcc[index].info();
+			index++;
 			break;
 		}
-		System.out.println("고객이름: "+acc.owner);
-		System.out.println("계좌번호: "+acc.myAccNum);
-		System.out.println("잔      고: "+acc.myMoney);
 		System.out.println("계좌개설이 완료되었습니다.");
 	}
 	public void depositMoney() {
@@ -81,11 +88,8 @@ public class AccountManager implements MenuChoice{
 	public void showAccInfo() {
 		System.out.println("***계좌 정보출력***");
 		for(Account a : arrAcc) {
-			if(a == null) break;
-			
-			System.out.printf("----------\n"
-					+ "계좌번호: %s\n고객이름: %s\n잔고: %d\n"
-					,a.myAccNum,a.owner,a.myMoney);
+			if(a == null) { break; }
+			a.info();
 		}
 		System.out.println("전체계좌정보 출력이 완료되었습니다.");
 	}
@@ -97,21 +101,24 @@ public class AccountManager implements MenuChoice{
 		boolean existAcc = false;
 		
 		//계좌존재유무를 조회
-		for( ; index <= arrAcc.length ; index++) 
-			if(arrAcc[index].myAccNum == accNum) 
-				{existAcc = true;	break; }
-			else
+		for(Account a: arrAcc)//null포인트예외발생중
+			if(a.myAccNum == accNum) { 
+				existAcc = true;
+				break; 
+			}
+			else {
 				existAcc = false;
+				index++;
+			}
 		
 		if(existAcc) {
 			int money;
-			
 			switch (in_out) {
 			case "입금":
 				System.out.println("입금액: ");
 				money = scan.nextInt();
 				if(money>0) {
-					arrAcc[index].myMoney += money;
+					arrAcc[index].rateWithSave(money);
 					System.out.println("입금되었습니다.");
 				}
 				else

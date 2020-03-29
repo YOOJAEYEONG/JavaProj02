@@ -24,17 +24,18 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 	
 	
 	public void showMenu() {
-		System.out.println("-----Menu-----\r"
-				+ "1.계 좌 개 설\r" + 
+		System.out.println("-----Menu-----\r" +
+				"1.계 좌 개 설\r" + 
 				"2.입	금\r" + 
 				"3.출	금\r" + 
-				"4.계좌정보출력\r");
+				"4.계좌정보출력\r" +
+				"5.프로그램종료");
 	
 		
 		Account acc = new Account();
 		Scanner scan = new Scanner(System.in);
 		while(true) {
-			acc.showMenu();
+			
 			switch (scan.nextInt()) {
 			case MAKE:
 				acc.makeAccount();
