@@ -56,21 +56,25 @@ public class AccountManager implements MenuChoice{
 			System.out.println("기본이자%(정수만입력): ");
 			
 			arrAcc[index] = 
-					new NormalAccount(
-							acc.myAccNum, acc.owner, scan.nextInt());
-			arrAcc[index].info();
-			index++;
+					new Account(
+							acc.myAccNum, acc.owner);
+			arrAcc[index++].info();
 			break;
 			
 		case 2:
 			System.out.println("고객이름: ");
 			acc.owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");
-			arrAcc[index] = 
-					new HighCreditAccount(
-							acc.myAccNum, acc.owner, scan.nextInt());
-			arrAcc[index].info();
-			index++;
+			int rateVal = scan.nextInt();
+			if(rateVal==2)
+				arrAcc[index] = 
+						new NormalAccount(
+								acc.myAccNum, acc.owner, rateVal);
+			if(rateVal==3)
+				arrAcc[index] = 
+				new HighCreditAccount(
+						acc.myAccNum, acc.owner, rateVal);
+			arrAcc[index++].info();
 			break;
 		}
 		System.out.println("계좌개설이 완료되었습니다.");
