@@ -1,22 +1,18 @@
-package project2.ver02;
+package project2.ver04;
 
-public class HighCreditAccount extends Account {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class NormalAccount extends Account implements Serializable{
 
 	String grade;
 	int Rate;
-	public HighCreditAccount() {
-		super();
-	}
-
-
-	public HighCreditAccount(int myAccNum, String owner, int Rate, String grade) {
+	public NormalAccount(String myAccNum, String owner, int Rate, String grade) {
 		super(myAccNum,owner);
 		this.grade = grade; 
-		myMoney += 1000;
 		this.Rate = Rate;
 	}
 	
-
 	@Override
 	public int rateWithSave(int saveMoney) {
 		myMoney = (int) (myMoney
@@ -32,6 +28,4 @@ public class HighCreditAccount extends Account {
 		System.out.println("기본이자> "+Rate+"%");
 		System.out.println("신용등급> "+grade);
 	}
-	
-	
 }

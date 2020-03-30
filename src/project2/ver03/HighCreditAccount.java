@@ -9,9 +9,9 @@ public class HighCreditAccount extends Account {
 	}
 
 
-	public HighCreditAccount(int myAccNum, String owner, int Rate) {
+	public HighCreditAccount(String myAccNum, String owner, int Rate, String grade) {
 		super(myAccNum,owner);
-		grade = "B"; 
+		this.grade = grade; 
 		myMoney += 1000;
 		this.Rate = Rate;
 	}

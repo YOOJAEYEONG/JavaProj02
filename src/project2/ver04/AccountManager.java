@@ -1,17 +1,25 @@
-package project2.ver03;
+package project2.ver04;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 
-public class AccountManager implements MenuChoice{
+
+
+
+@SuppressWarnings("serial")
+public class AccountManager implements MenuChoice, Serializable{
 
 	Scanner scan = new Scanner(System.in);
-	
-	Account[] arrAcc = new Account[50];
-	Account acc = new Account();
-	
-	int index=0;
-	
+	HashSet<Account> accountSet = new HashSet<Account>();
 	
 	
 	public void showMenu() {
@@ -43,6 +51,9 @@ public class AccountManager implements MenuChoice{
 					showAccInfo();
 					break;
 				case EXIT:
+					saveFile();
+					System.out.println(accountSet.size()
+							+"개의 뱅킹DB을 저장했습니다\n프로그램을 종료합니다.");
 					System.exit(0);
 				}
 			} catch (InputMismatchException e) {
@@ -62,41 +73,42 @@ public class AccountManager implements MenuChoice{
 	public void makeAccount() {
 		System.out.println("***신규계좌개설***");
 		System.out.println("1.보통계좌  2.신용신뢰계좌");
-		
-		acc.myAccNum = ""+(int)(Math.random()*100000);
+		String owner;
+		String accountNum = ""+(int)(Math.random()*100000);
 		switch(scan.nextInt()) {
 		case 1:
 			System.out.println("고객이름: ");
-			acc.owner = scan.next();
+			owner = scan.next();
 			
-			arrAcc[index] = 
-					new Account(
-							acc.myAccNum, acc.owner);
-			arrAcc[index++].info();
+			Account account = 
+					new Account(accountNum, owner);
+			saveCheckData(account);
 			break;
 			
 		case 2:
 			System.out.println("고객이름: ");
-			acc.owner = scan.next();
+			owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");
 			int rateVal = scan.nextInt();
 			System.out.println("신용등급(A,B,C등급): ");
 			String grade = scan.next();
 			
-			if(rateVal==2)
-				arrAcc[index] = 
+			if(rateVal==2) {
+				Account nomalAccount = 
 						new NormalAccount(
-								acc.myAccNum, acc.owner, rateVal, grade);
-			if(rateVal==3)
-				arrAcc[index] = 
-				new HighCreditAccount(
-						acc.myAccNum, acc.owner, rateVal, grade);
-			arrAcc[index++].info();
+								accountNum, owner, rateVal, grade);
+				saveCheckData(nomalAccount);
+			}
+			if(rateVal==3) {
+				Account highAccount = 
+						new HighCreditAccount(
+								accountNum, owner, rateVal, grade);
+				saveCheckData(highAccount);
+			}
 			break;
 		default :
 			System.out.println("잘못선택하셨습니다."); return;
 		}
-		System.out.println("계좌개설이 완료되었습니다.");
 	}
 	public void depositMoney() {
 		System.out.println("***입   금***");
@@ -108,36 +120,37 @@ public class AccountManager implements MenuChoice{
 		System.out.println("계좌번호와 출금할 금액을 입력하세요");
 		inOutCal("출금");
 	}
+	
 	public void showAccInfo() {
 		System.out.println("***계좌 정보출력***");
-		for(Account a : arrAcc) {
-			if(a == null) { break; }
-			a.info();
-		}
+		Iterator<Account> itr = accountSet.iterator();
+		while(itr.hasNext()) { 	itr.next().info();	}
 		System.out.println("전체계좌정보 출력이 완료되었습니다.");
 	}
 	
 	public void inOutCal(String in_out) {
 		System.out.println("계좌번호: "); 
-		int index=0;
 		String accNum = scan.next();
 		boolean existAcc = false;
-		
+		Account myAccount = null;
 		//계좌존재유무를 조회
-		try {
-			for(Account a: arrAcc)//null포인트예외발생중
-				if(a.myAccNum.equals(accNum)) { 
-					existAcc = true;
-					break; 
-				}
-				else {
-					existAcc = false;
-					index++;
-				}
-		} catch (NullPointerException e) {
-			System.out.println("해당계좌는 없습니다.");
-		}
+		Iterator<Account> itr = accountSet.iterator();
+		Iterator<Account> itrForInOut = accountSet.iterator();
 		
+		while(itr.hasNext()) {
+			
+			if(itr.next().myAccNum.equals(accNum)) { 
+				existAcc = true;
+				myAccount = itrForInOut.next();
+				System.out.println(myAccount.myMoney);
+				break; 
+			}
+			else {
+				myAccount = itrForInOut.next(); 
+				
+				existAcc = false;
+			}
+		}
 		if(existAcc) {
 			int money;
 			try {
@@ -150,7 +163,7 @@ public class AccountManager implements MenuChoice{
 							if(money%500!=0)
 								System.out.println("500원단위로 입금 가능합니다.");
 							else {
-								arrAcc[index].rateWithSave(money);
+								myAccount.rateWithSave(money);
 								System.out.println("입금되었습니다.");
 							}
 						}
@@ -165,8 +178,9 @@ public class AccountManager implements MenuChoice{
 						break;
 					}
 					//계좌가 있고 출금액이 잔고보다 <= 이면 출금진행
-					if(money<=arrAcc[index].myMoney) {
-						arrAcc[index].myMoney -= money;
+					
+					if(money<=myAccount.myMoney) {
+						myAccount.myMoney -= money;
 						System.out.println("출금되었습니다.");
 					}
 					else {
@@ -177,10 +191,13 @@ public class AccountManager implements MenuChoice{
 						String yesNo = scan.next();
 						if("YES".equalsIgnoreCase(yesNo)) { 
 							int sum=0; //출금은 1000원 단위로만 출금이 가능하도록 해야함
-							sum = ((int)(arrAcc[index].myMoney/1000))*1000;
-							arrAcc[index].myMoney -= sum;
+							sum = ((int)(myAccount.myMoney/1000))*1000;
+							System.out.println("계산전sum"+sum);
+							
+							
+							myAccount.myMoney -= sum;
 							System.out.println(sum+"원이 출금되었습니다.");
-							System.out.println("잔액: "+ arrAcc[index].myMoney);
+							System.out.println("잔액: "+ myAccount.myMoney);
 						}
 						else if("NO".equalsIgnoreCase(yesNo)) {
 							System.out.println("출금을 취소합니다.");
@@ -193,8 +210,69 @@ public class AccountManager implements MenuChoice{
 			} catch (InputMismatchException e) {//정수로입력해야하는데 문자입력시
 				System.out.println("숫자를 입력하세요");
 			}
-		}
-		
-	}
+		}//if(existAcc)
+		System.out.println("해당계좌를 찾을 수없습니다.");
+	}//inOutCal()
 	
+	
+	public void saveCheckData(Account newAccount) {
+		if(false == accountSet.add(newAccount)) {
+			System.out.println(newAccount.myAccNum+
+					" 의 중복된 계좌가 발견되었습니다. (덮어쓰기 1:예 / 2:아니오)");
+
+			if(scan.nextInt()==1) {
+				accountSet.remove(newAccount);
+				accountSet.add(newAccount);
+				newAccount.info();
+				System.out.println("계좌생성이 완료되었습니다.");
+			}
+			else	System.out.println("취소되었습니다");
+		}
+		else	{
+			newAccount.info();
+			System.out.println("계좌생성이 완료되었습니다.");
+		}
+	}
+
+
+	public void saveFile() {
+		try {
+			String src = "C:/03WorkSpace/JavaProj02/src/project2/ver04/AccountManager.obj";
+			FileOutputStream fileOut = new FileOutputStream(src);
+			ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+			
+			objOut.writeObject(accountSet);
+			objOut.close();
+			fileOut.close();
+			System.out.println("뱅킹 DB 저장완료");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("IO에러발생");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void loadFile() {
+		String src = "C:/03WorkSpace/JavaProj02/src/project2/ver04/AccountManager.obj";
+		try {
+			FileInputStream fileIn = new FileInputStream(src);
+			ObjectInputStream objIn = new ObjectInputStream(fileIn);
+			accountSet = (HashSet<Account>)objIn.readObject();
+			
+			
+			System.out.println("기존뱅킹 DB 로드완료");
+			objIn.close();
+			fileIn.close();
+		} catch (FileNotFoundException | ClassCastException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }

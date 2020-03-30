@@ -1,6 +1,9 @@
-package project2.ver02;
+package project2.ver04;
 
-public class HighCreditAccount extends Account {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class HighCreditAccount extends Account implements Serializable {
 
 	String grade;
 	int Rate;
@@ -9,7 +12,7 @@ public class HighCreditAccount extends Account {
 	}
 
 
-	public HighCreditAccount(int myAccNum, String owner, int Rate, String grade) {
+	public HighCreditAccount(String myAccNum, String owner, int Rate, String grade) {
 		super(myAccNum,owner);
 		this.grade = grade; 
 		myMoney += 1000;

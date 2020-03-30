@@ -66,16 +66,21 @@ public class AccountManager implements MenuChoice{
 			acc.owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");
 			int rateVal = scan.nextInt();
+			System.out.println("신용등급(A,B,C등급): ");
+			String grade = scan.next();
+			
 			if(rateVal==2)
 				arrAcc[index] = 
 						new NormalAccount(
-								acc.myAccNum, acc.owner, rateVal);
+								acc.myAccNum, acc.owner, rateVal, grade);
 			if(rateVal==3)
 				arrAcc[index] = 
 				new HighCreditAccount(
-						acc.myAccNum, acc.owner, rateVal);
+						acc.myAccNum, acc.owner, rateVal, grade);
 			arrAcc[index++].info();
 			break;
+		default :
+			System.out.println("잘못선택하셨습니다."); return;
 		}
 		System.out.println("계좌개설이 완료되었습니다.");
 	}

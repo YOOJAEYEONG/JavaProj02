@@ -4,9 +4,9 @@ public class NormalAccount extends Account{
 
 	String grade;
 	int Rate;
-	public NormalAccount(int myAccNum, String owner, int Rate) {
+	public NormalAccount(int myAccNum, String owner, int Rate, String grade) {
 		super(myAccNum,owner);
-		grade = "C"; 
+		this.grade = grade; 
 		this.Rate = Rate;
 	}
 	

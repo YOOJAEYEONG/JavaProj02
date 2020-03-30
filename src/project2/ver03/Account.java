@@ -4,12 +4,12 @@ package project2.ver03;
 
 public class Account implements CustomSpecialRate{ //계좌 정보를 표현
 	
-	int myAccNum, myMoney;
-	String owner;
+	int myMoney;
+	String owner, myAccNum;
 	double defaultRate = 0.02;
 	
 	public Account() {	}
-	public Account (int accNum, String who) {
+	public Account (String accNum, String who) {
 		myAccNum = accNum;
 		myMoney = 1000;
 		owner = who;
