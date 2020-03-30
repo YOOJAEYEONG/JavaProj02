@@ -11,24 +11,21 @@ public class DepositSQL extends IConnectImpl {
 	public void execute() {
 		try {
 			
-			int number, affected; 
+			int num1,num2 , affected; 
 			String query;
-			number = Integer.parseInt(scanValue("계좌번호: "));
-			
-			query = " SELECT \"잔액\" FROM banking_tb "
-					+ " WHERE \"계좌번호\" = "+number;
-			if(1==psmt.executeUpdate()) {
-				query = " UPDATE banking_tb SET \"계좌번호\" = "+number
-						+ " WHERE \"계좌번호\" = "+number;
-				affected = psmt.executeUpdate();
-				System.out.println(affected+"행이 입력되었습니다.");
-			}
-			else {
-				System.out.println("해당계좌가 없습니다.");
-			}
+			num1 = Integer.parseInt(scanValue("계좌번호: "));
+			num2 = Integer.parseInt(scanValue("입금액: "));
 			
 			
 			
+			query = " UPDATE banking_tb SET \"잔액\" = \"잔액\" + "+num2
+					+ " WHERE \"계좌번호\" = "+num1;
+			
+			
+			psmt = con.prepareStatement(query);
+            rs = psmt.executeQuery();
+
+            System.out.println("입금되었습니다.");
 		} catch (SQLException | NullPointerException e) {
 			e.printStackTrace();
 		}

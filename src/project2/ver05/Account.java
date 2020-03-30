@@ -10,6 +10,7 @@ import project2.ver05.jdbcConnect.IConnectImpl;
 import project2.ver05.jdbcStatement.DepositSQL;
 import project2.ver05.jdbcStatement.InsertSQL;
 import project2.ver05.jdbcStatement.ShowAllSQL;
+import project2.ver05.jdbcStatement.WithdrawSQL;
 
 
 
@@ -86,7 +87,7 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 				case DEPOSIT:
 					new DepositSQL().execute();	break;
 				case WITHDRAW:
-								break;
+					new WithdrawSQL().execute();break;
 				case INQUIRE:
 					new ShowAllSQL().execute();	break;
 				case EXIT:

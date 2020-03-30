@@ -11,31 +11,19 @@ public class WithdrawSQL extends IConnectImpl {
 	public void execute() {
 		try {
 			
-			int number, affected; 
+			int num1, num2, affected; 
 			String query;
-			number = Integer.parseInt(scanValue("계좌번호: "));
+			num1 = Integer.parseInt(scanValue("계좌번호: "));
+			num2 = Integer.parseInt(scanValue("출금액: "));
 			
-			query = " SELECT \"계좌번호\" FROM banking_tb "
-					+ " WHERE \"계좌번호\" LIKE "+number+" ";
-			if(1==psmt.executeUpdate()) {
-				number = Integer.parseInt(scanValue("출금액: "));
-				if
-				psmt = con.prepareStatement(query);
-	            rs = psmt.executeQuery();
+			
+			query = " UPDATE banking_tb SET \"잔액\" = \"잔액\"+ "+num2
+					+ " WHERE \"계좌번호\" = "+num1;
+			
+			psmt = con.prepareStatement(query);
+            rs = psmt.executeQuery();
 
-				
-				
-				
-				
-				query = " UPDATE banking_tb SET \"잔액\" = \"잔액\"+ "+number
-						+ " WHERE \"계좌번호\" = "+number;
-				affected = psmt.executeUpdate();
-				System.out.println(affected+"행이 입력되었습니다.");
-			}
-			else {
-				System.out.println("해당계좌가 없습니다.");
-			}
-			
+			System.out.println("출금되었습니다.");
 			
 			
 		} catch (SQLException | NullPointerException e) {
