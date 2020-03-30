@@ -17,7 +17,7 @@ public class WithdrawSQL extends IConnectImpl {
 			num2 = Integer.parseInt(scanValue("출금액: "));
 			
 			
-			query = " UPDATE banking_tb SET \"잔액\" = \"잔액\"+ "+num2
+			query = " UPDATE banking_tb SET \"잔액\" = \"잔액\"- "+num2
 					+ " WHERE \"계좌번호\" = "+num1;
 			
 			psmt = con.prepareStatement(query);
