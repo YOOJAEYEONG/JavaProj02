@@ -25,12 +25,12 @@ public class Account implements MenuChoice{ //계좌 정보를 표현
 			String sqlCreateTable = 
 					" CREATE TABLE banking_tb( " + 
 						"    \"계좌번호\" NUMBER(20) primary key, " + 
-						"    \"이름\" NVARCHAR2(11), " + 
+						"    \"이름\" NVARCHAR2(11) , " + 
 						"    \"잔액\" NUMBER(20) " +
-						" )";
+						" ) ";
 			icoimpl.stmt = icoimpl.con.createStatement();
 			icoimpl.rs = icoimpl.stmt.executeQuery(sqlCreateTable);
-			System.out.println("테이블생성됨");
+			System.out.println("banking_tb : 테이블생성됨");
 			
 			String sqlNewSequence = 
 					"CREATE SEQUENCE seq_banking " + 
