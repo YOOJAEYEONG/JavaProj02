@@ -11,7 +11,7 @@ public class WithdrawSQL extends IConnectImpl {
 	public void execute() {
 		try {
 			
-			int num1, num2, affected; 
+			int num1, num2; 
 			String query;
 			num1 = Integer.parseInt(scanValue("계좌번호: "));
 			num2 = Integer.parseInt(scanValue("출금액: "));
