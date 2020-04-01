@@ -70,14 +70,17 @@ public class AccountManager implements MenuChoice, Serializable{
 		}
 	
 	}
+
 	public void makeAccount() {
 		System.out.println("***신규계좌개설***");
 		System.out.println("1.보통계좌  2.신용신뢰계좌");
 		String owner, grade;
 		String accountNum = ""+(int)(Math.random()*100000);
 		int rateVal;
+		
+		
 		switch(scan.nextInt()) {
-		case 1:
+		case 1://일반계좌
 			System.out.println("고객이름: ");				owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt(); 
 			scan.nextLine();
@@ -88,7 +91,7 @@ public class AccountManager implements MenuChoice, Serializable{
 			saveCheckData(nomalAccount);
 			break;
 			
-		case 2:
+		case 2://신용계좌
 			System.out.println("고객이름: ");				owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt();
 			scan.nextLine();
@@ -102,11 +105,13 @@ public class AccountManager implements MenuChoice, Serializable{
 			System.out.println("잘못선택하셨습니다."); return;
 		}
 	}
+
 	public void depositMoney() {
 		System.out.println("***입   금***");
 		System.out.println("계좌번호와 입금할 금액을 입력하세요");
 		inOutCal("입금");
 	}
+
 	public void withdrawMoney() {
 		System.out.println("***출   금***");
 		System.out.println("계좌번호와 출금할 금액을 입력하세요");
@@ -125,6 +130,8 @@ public class AccountManager implements MenuChoice, Serializable{
 		String accNum = scan.next();
 		boolean existAcc = false;
 		Account myAccount = null;
+		
+		
 		//계좌존재유무를 조회
 		Iterator<Account> itr = accountSet.iterator();
 		Iterator<Account> itrForInOut = accountSet.iterator();
@@ -145,19 +152,17 @@ public class AccountManager implements MenuChoice, Serializable{
 		if(existAcc) {
 			int money;
 			try {
-				
 				switch (in_out) {
 				case "입금":
 						System.out.println("입금액: ");
 						money = scan.nextInt();
-						if(money>0) {
+						if(money>0) 
 							if(money%500!=0)
 								System.out.println("500원단위로 입금 가능합니다.");
 							else {
 								myAccount.rateWithSave(money);
 								System.out.println("입금되었습니다.");
 							}
-						}
 						else
 							System.out.println("입금액이 0보다 작습니다");
 					break;
@@ -183,10 +188,9 @@ public class AccountManager implements MenuChoice, Serializable{
 						if("YES".equalsIgnoreCase(yesNo)) { 
 							int sum=0; //출금은 1000원 단위로만 출금이 가능하도록 해야함
 							sum = ((int)(myAccount.myMoney/1000))*1000;
-							System.out.println("계산전sum"+sum);
-							
 							
 							myAccount.myMoney -= sum;
+							
 							System.out.println(sum+"원이 출금되었습니다.");
 							System.out.println("잔액: "+ myAccount.myMoney);
 						}
@@ -204,8 +208,7 @@ public class AccountManager implements MenuChoice, Serializable{
 		}//if(existAcc)
 		else System.out.println("해당계좌를 찾을 수없습니다.");
 	}//inOutCal()
-	
-	
+		
 	public void saveCheckData(Account newAccount) {
 		if(false == accountSet.add(newAccount)) {
 			System.out.println(newAccount.myAccNum+
@@ -225,10 +228,11 @@ public class AccountManager implements MenuChoice, Serializable{
 		}
 	}
 
-
 	public void saveFile() {
 		try {
-			String src = "C:/03WorkSpace/JavaProj02/src/project2/ver04/AccountManager.obj";
+			String src = 
+					"C:/03WorkSpace/JavaProj02/src/project2/" +
+					"ver04/AccountManager.obj";
 			FileOutputStream fileOut = new FileOutputStream(src);
 			ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
 			
@@ -246,7 +250,9 @@ public class AccountManager implements MenuChoice, Serializable{
 
 	@SuppressWarnings("unchecked")
 	public void loadFile() {
-		String src = "C:/03WorkSpace/JavaProj02/src/project2/ver04/AccountManager.obj";
+		String src = 
+				"C:/03WorkSpace/JavaProj02/src/" +
+				"project2/ver04/AccountManager.obj";
 		try {
 			FileInputStream fileIn = new FileInputStream(src);
 			ObjectInputStream objIn = new ObjectInputStream(fileIn);
