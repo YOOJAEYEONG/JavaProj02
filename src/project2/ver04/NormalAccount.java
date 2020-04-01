@@ -13,7 +13,7 @@ public class NormalAccount extends Account implements Serializable{
 	
 	@Override
 	public int rateWithSave(int saveMoney) {
-		myMoney = (int) (myMoney
+		myMoney = (int)(myMoney
 				+(myMoney*(rate/100))
 				+saveMoney);
 		return myMoney;
