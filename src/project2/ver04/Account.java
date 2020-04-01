@@ -7,7 +7,6 @@ public class Account implements CustomSpecialRate, Serializable{ //계좌 정보
 	
 	int  myMoney;
 	String owner, myAccNum;
-	double defaultRate = 0.02;
 	
 	public Account() {	}
 	public Account (String accNum, String who) {
@@ -18,7 +17,7 @@ public class Account implements CustomSpecialRate, Serializable{ //계좌 정보
 	
 	
 	public int rateWithSave(int saveMoney) {
-		myMoney = (int)(myMoney+myMoney*defaultRate+saveMoney);
+		myMoney +=saveMoney;
 		return myMoney;
 	}
 
