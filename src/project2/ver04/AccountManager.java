@@ -73,38 +73,30 @@ public class AccountManager implements MenuChoice, Serializable{
 	public void makeAccount() {
 		System.out.println("***신규계좌개설***");
 		System.out.println("1.보통계좌  2.신용신뢰계좌");
-		String owner;
+		String owner, grade;
 		String accountNum = ""+(int)(Math.random()*100000);
+		int rateVal;
 		switch(scan.nextInt()) {
 		case 1:
-			System.out.println("고객이름: ");
-			owner = scan.next();
+			System.out.println("고객이름: ");				owner = scan.next();
+			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt(); 
+			scan.nextLine();
 			
-			Account account = 
-					new Account(accountNum, owner);
-			saveCheckData(account);
+			Account nomalAccount = 
+					new NormalAccount(accountNum, owner, rateVal);
+			
+			saveCheckData(nomalAccount);
 			break;
 			
 		case 2:
-			System.out.println("고객이름: ");
-			owner = scan.next();
-			System.out.println("기본이자%(정수만입력): ");
-			int rateVal = scan.nextInt();
-			System.out.println("신용등급(A,B,C등급): ");
-			String grade = scan.next();
+			System.out.println("고객이름: ");				owner = scan.next();
+			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt();
+			scan.nextLine();
+			System.out.println("신용등급(A,B,C등급): ");	grade = scan.next();
+			Account highAccount = 
+					new HighCreditAccount(accountNum, owner, rateVal, grade);
 			
-			if(rateVal==2) {
-				Account nomalAccount = 
-						new NormalAccount(
-								accountNum, owner, rateVal, grade);
-				saveCheckData(nomalAccount);
-			}
-			if(rateVal==3) {
-				Account highAccount = 
-						new HighCreditAccount(
-								accountNum, owner, rateVal, grade);
-				saveCheckData(highAccount);
-			}
+			saveCheckData(highAccount);
 			break;
 		default :
 			System.out.println("잘못선택하셨습니다."); return;
@@ -142,12 +134,11 @@ public class AccountManager implements MenuChoice, Serializable{
 			if(itr.next().myAccNum.equals(accNum)) { 
 				existAcc = true;
 				myAccount = itrForInOut.next();
-				System.out.println(myAccount.myMoney);
+				System.out.println("계좌를 찾았습니다.");
 				break; 
 			}
 			else {
 				myAccount = itrForInOut.next(); 
-				
 				existAcc = false;
 			}
 		}
@@ -206,12 +197,12 @@ public class AccountManager implements MenuChoice, Serializable{
 					}
 				}//switch
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				System.out.println("잘못입력하였습니다.");
 			} catch (InputMismatchException e) {//정수로입력해야하는데 문자입력시
 				System.out.println("숫자를 입력하세요");
 			}
 		}//if(existAcc)
-		System.out.println("해당계좌를 찾을 수없습니다.");
+		else System.out.println("해당계좌를 찾을 수없습니다.");
 	}//inOutCal()
 	
 	
@@ -246,10 +237,10 @@ public class AccountManager implements MenuChoice, Serializable{
 			fileOut.close();
 			System.out.println("뱅킹 DB 저장완료");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e);
 			System.out.println("IO에러발생");
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 
@@ -265,12 +256,12 @@ public class AccountManager implements MenuChoice, Serializable{
 			System.out.println("기존뱅킹 DB 로드완료");
 			objIn.close();
 			fileIn.close();
-		} catch (FileNotFoundException | ClassCastException e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			System.out.println("기존 데이터가 없습니다.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 

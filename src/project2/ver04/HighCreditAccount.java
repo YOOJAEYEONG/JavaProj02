@@ -6,25 +6,30 @@ import java.io.Serializable;
 public class HighCreditAccount extends Account implements Serializable {
 
 	String grade;
-	int Rate;
+	int rate;
 	public HighCreditAccount() {
 		super();
 	}
 
 
-	public HighCreditAccount(String myAccNum, String owner, int Rate, String grade) {
+	public HighCreditAccount(String myAccNum, String owner, int rate, String grade) {
 		super(myAccNum,owner);
 		this.grade = grade; 
 		myMoney += 1000;
-		this.Rate = Rate;
+		this.rate = rate;
 	}
 	
 
 	@Override
 	public int rateWithSave(int saveMoney) {
+		double addRate = 0.0;
+		if(grade.equals("A"))	addRate = A_GRADE_RATE;
+		else if(grade.equals("B"))	addRate = B_GRADE_RATE;
+		else if(grade.equals("C"))	addRate = C_GRADE_RATE;
+		
 		myMoney = (int) (myMoney
-				+(myMoney*defaultRate)
-				+(myMoney*B_GRADE_RATE)
+				+(myMoney*(rate/100))
+				+(myMoney*addRate)
 				+saveMoney);
 		return myMoney;
 	}
@@ -32,7 +37,7 @@ public class HighCreditAccount extends Account implements Serializable {
 	@Override
 	public void info() {
 		super.info();
-		System.out.println("기본이자> "+Rate+"%");
+		System.out.println("기본이자> "+rate+"%");
 		System.out.println("신용등급> "+grade);
 	}
 	

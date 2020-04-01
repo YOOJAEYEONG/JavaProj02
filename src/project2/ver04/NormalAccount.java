@@ -5,19 +5,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class NormalAccount extends Account implements Serializable{
 
-	String grade;
-	int Rate;
-	public NormalAccount(String myAccNum, String owner, int Rate, String grade) {
+	int rate;
+	public NormalAccount(String myAccNum, String owner, int rate) {
 		super(myAccNum,owner);
-		this.grade = grade; 
-		this.Rate = Rate;
+		this.rate = rate;
 	}
 	
 	@Override
 	public int rateWithSave(int saveMoney) {
 		myMoney = (int) (myMoney
-				+(myMoney*defaultRate)
-				+(myMoney*B_GRADE_RATE)
+				+(myMoney*(rate/100))
 				+saveMoney);
 		return myMoney;
 	}
@@ -25,7 +22,6 @@ public class NormalAccount extends Account implements Serializable{
 	@Override
 	public void info() {
 		super.info();
-		System.out.println("기본이자> "+Rate+"%");
-		System.out.println("신용등급> "+grade);
+		System.out.println("기본이자> "+rate+"%");
 	}
 }
