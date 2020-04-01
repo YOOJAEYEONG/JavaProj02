@@ -86,10 +86,8 @@ public class AccountManager implements MenuChoice, Serializable{
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt(); 
 			scan.nextLine();
 			
-//			Account nomalAccount = 
 			saveCheckData(new NormalAccount(accountNum, owner, rateVal));
 			
-//			saveCheckData(nomalAccount);
 			break;
 			
 		case 2://신용계좌
@@ -99,10 +97,8 @@ public class AccountManager implements MenuChoice, Serializable{
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt();
 			scan.nextLine();
 			System.out.println("신용등급(A,B,C등급): ");	grade = scan.next();
-//			Account highAccount = 
 			saveCheckData(new HighCreditAccount(accountNum, owner, rateVal, grade));
 			
-//			saveCheckData(highAccount);
 			break;
 		default :
 			System.out.println("잘못선택하셨습니다."); return;
