@@ -35,29 +35,17 @@ public class Account implements CustomSpecialRate, Serializable{ //계좌 정보
 		result = prime * result + ((myAccNum == null) ? 0 : myAccNum.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj)	return true;
+		if (obj == null)	return false;
+		if (getClass() != obj.getClass())	return true;
+		
 		Account other = (Account) obj;
-		if (myAccNum == null) {
-			if (other.myAccNum != null)
-				return false;
-		} else if (!myAccNum.equals(other.myAccNum))
-			return false;
+		if (myAccNum == null) 
+			if (other.myAccNum != null)return false;
+		else if (!myAccNum.equals(other.myAccNum))	return false;
 		return true;
 	}
-
-	
-
-	
-	
-	
-
-	
-
 }

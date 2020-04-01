@@ -77,31 +77,32 @@ public class AccountManager implements MenuChoice, Serializable{
 		String owner, grade;
 		String accountNum;
 		int rateVal;
-		
-		
-		switch(scan.nextInt()) {
+		int select = scan.nextInt();	scan.nextLine();
+		switch(select) {
 		case 1://일반계좌
-			System.out.println("계좌번호: ");				accountNum = scan.nextLine();
+			System.out.println("계좌번호: ");				
+			accountNum = scan.next();	scan.nextLine();
 			System.out.println("고객이름: ");				owner = scan.nextLine();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt(); 
 			scan.nextLine();
 			
-			Account nomalAccount = 
-					new NormalAccount(accountNum, owner, rateVal);
+//			Account nomalAccount = 
+			saveCheckData(new NormalAccount(accountNum, owner, rateVal));
 			
-			saveCheckData(nomalAccount);
+//			saveCheckData(nomalAccount);
 			break;
 			
 		case 2://신용계좌
-			System.out.println("계좌번호: ");				accountNum = scan.nextLine();
-			System.out.println("고객이름: ");				owner = scan.next();
+			System.out.println("계좌번호: ");
+			accountNum = scan.next();	scan.nextLine();
+			System.out.println("고객이름: ");				owner = scan.nextLine();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt();
 			scan.nextLine();
 			System.out.println("신용등급(A,B,C등급): ");	grade = scan.next();
-			Account highAccount = 
-					new HighCreditAccount(accountNum, owner, rateVal, grade);
+//			Account highAccount = 
+			saveCheckData(new HighCreditAccount(accountNum, owner, rateVal, grade));
 			
-			saveCheckData(highAccount);
+//			saveCheckData(highAccount);
 			break;
 		default :
 			System.out.println("잘못선택하셨습니다."); return;
