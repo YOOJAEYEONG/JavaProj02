@@ -75,13 +75,14 @@ public class AccountManager implements MenuChoice, Serializable{
 		System.out.println("***신규계좌개설***");
 		System.out.println("1.보통계좌  2.신용신뢰계좌");
 		String owner, grade;
-		String accountNum = ""+(int)(Math.random()*100000);
+		String accountNum;
 		int rateVal;
 		
 		
 		switch(scan.nextInt()) {
 		case 1://일반계좌
-			System.out.println("고객이름: ");				owner = scan.next();
+			System.out.println("계좌번호: ");				accountNum = scan.nextLine();
+			System.out.println("고객이름: ");				owner = scan.nextLine();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt(); 
 			scan.nextLine();
 			
@@ -92,6 +93,7 @@ public class AccountManager implements MenuChoice, Serializable{
 			break;
 			
 		case 2://신용계좌
+			System.out.println("계좌번호: ");				accountNum = scan.nextLine();
 			System.out.println("고객이름: ");				owner = scan.next();
 			System.out.println("기본이자%(정수만입력): ");	rateVal = scan.nextInt();
 			scan.nextLine();
@@ -272,4 +274,9 @@ public class AccountManager implements MenuChoice, Serializable{
 	}
 
 
+	public String scanMethod(String message) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println(message);
+		return scan.nextLine();
+	}
 }
