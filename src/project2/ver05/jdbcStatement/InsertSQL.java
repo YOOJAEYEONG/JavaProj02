@@ -9,6 +9,7 @@ public class InsertSQL extends IConnectImpl {
 
 	
 	//쿼리작성 및 실행 메소드
+	@Override
 	public void execute() {
 		try {
 			//4. SQL문 작성
